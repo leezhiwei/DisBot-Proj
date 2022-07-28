@@ -9,7 +9,7 @@ def home():
     return "Spot the difference key: {} \nMystery Box key: {}".format(ke2,ke) 
 
 def run():
-  app.run(host='0.0.0.0',port=8080)
+    app.run(host='0.0.0.0',port=8080)
 
 def keep_alive(k,k2):
     global ke

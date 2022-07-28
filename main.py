@@ -1,21 +1,25 @@
+# Changelog:
+# 
+
+# Comments:
+# Overall imports seem all good
+# Code in on_message is rather unreadable, and the logic might have bugs
+# I don't have time to do it rn so this should be good enough for now
+# I might rework all of it when I have the time
+
 import discord
 import random
 import os
 import time
 import variables
-import functions
+import functions #Don't need to import functions twice, but since you need this for the global vars...
+# You can import multiple stuff from one import statement
+from functions import sen_gen, start_time, teamfind, add_pts, riddle_gen, riddle, typing
 
-from functions import sengen
-from functions import start_time
-from functions import teamfind
-from functions import addpts
-from functions import riddlegen
-from functions import riddle
-from functions import typing
 from keep_alive import keep_alive
 
-key = random.randint(1000000000, 9999999999)
-key2 = random.randint(1000000000, 9999999999)
+key = random.randint(1000000000, 9999999999) # Uhhhhhh don't use random for keys
+key2 = random.randint(1000000000, 9999999999) # Either use the builtin secrets module or uuid
 print("The key for mystery box is {}".format(key))
 print("The key for spot the difference is {}".format(key2))
 
@@ -41,11 +45,9 @@ async def on_message(msg):
         author = msg.author
         if msg.content.startswith('/'):
             if 'choose' in msg.content:
-                while i < len(msg.author.roles):
-                    roletemp = msg.author.roles[i]
+                for roletemp in msg.author.roles: # Use for-loop
                     if 'Team' in str(roletemp):
                         AlreadyIn = True
-                    i += 1
                 if AlreadyIn == True:
                     await msg.channel.send('Error: You are already in a Team')
                 else:
@@ -92,15 +94,11 @@ async def on_message(msg):
         elif msg.channel.id == variables.channelids[0] and variables.riddlelist[
                 functions.randnum][1] != msg.content:
             await msg.channel.send("Incorrect.")
-        elif str(
-                key2
-        ) == msg.content and msg.channel.id == variables.channelids[1]:
+        elif str(key2) == msg.content and msg.channel.id == variables.channelids[1]: # No need to be accross multiple lines
             await msg.channel.send("Correct for spot the difference")
             await msg.channel.send("Team {} :".format(teamfind(msg.author.roles))+str(addpts(teamfind(msg.author.roles),20)))
             await msg.channel.send("Head to #station-3")
-        elif str(
-                key
-        ) == msg.content and msg.channel.id == variables.channelids[3]:
+        elif str(key) == msg.content and msg.channel.id == variables.channelids[3]: # same as above
             await msg.channel.send("Correct for mystery box")
             await msg.channel.send("Team {} :".format(teamfind(msg.author.roles))+str(addpts(teamfind(msg.author.roles),20)))
 
